@@ -35,7 +35,7 @@ public class CartoesServiceTest {
     @DisplayName("Deve criar um cartão novo sem erros")
     void shoudCreateNewCard() {
         CartaoDTO cartaoDTO = new CartaoDTO();
-        cartaoDTO.setNumeroCartao(123456313L);
+        cartaoDTO.setNumeroCartao("123456313");
         cartaoDTO.setSenha("senha");
 
         Cartao cartao = new Cartao(cartaoDTO.getNumeroCartao(), cartaoDTO.getSenha());

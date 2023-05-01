@@ -1,7 +1,6 @@
 package com.example.miniautorizador.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,13 +18,13 @@ public class Cartao {
     private Long id;
 
     @Column(unique = true, updatable = false)
-    private Long numeroCartao;
+    private String numeroCartao;
 
     private BigDecimal saldo;
 
     private String senha;
 
-    public Cartao(Long numeroCartao, String senha) {
+    public Cartao(String numeroCartao, String senha) {
         this.numeroCartao = numeroCartao;
         this.senha = senha;
         this.saldo = new BigDecimal("500");

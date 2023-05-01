@@ -15,7 +15,7 @@ public class CartoesService {
 
     private final CartoesRepositorie cartoesRepositorie;
 
-    protected CartaoDTO criarCartao(CartaoDTO cartaoDTO) {
+    public CartaoDTO criarCartao(CartaoDTO cartaoDTO) {
         ModelMapper mapper = new ModelMapper();
         Cartao cartao = new Cartao(cartaoDTO.getNumeroCartao(), cartaoDTO.getSenha());
 
