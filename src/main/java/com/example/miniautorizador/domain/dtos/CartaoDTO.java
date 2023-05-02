@@ -15,9 +15,6 @@ public class CartaoDTO {
     @Pattern(regexp = "^[0-9]+$")
     private String numeroCartao;
 
-    @JsonIgnore
-    private BigDecimal saldo;
-
     @NotBlank
     private String senha;
 }

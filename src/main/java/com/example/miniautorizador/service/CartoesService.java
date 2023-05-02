@@ -3,6 +3,7 @@ package com.example.miniautorizador.service;
 import com.example.miniautorizador.domain.Cartao;
 import com.example.miniautorizador.domain.dtos.CartaoDTO;
 import com.example.miniautorizador.exceptions.CartaoExistenteException;
+import com.example.miniautorizador.exceptions.CartaoInexistenteException;
 import com.example.miniautorizador.repositories.CartoesRepositorie;
 import lombok.RequiredArgsConstructor;
 import org.h2.jdbc.JdbcSQLIntegrityConstraintViolationException;
@@ -12,6 +13,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -20,15 +22,30 @@ public class CartoesService {
     private final CartoesRepositorie cartoesRepositorie;
 
     public CartaoDTO criarCartao(CartaoDTO cartaoDTO) {
-        ModelMapper mapper = new ModelMapper();
-        Cartao cartao = new Cartao(cartaoDTO.getNumeroCartao(), cartaoDTO.getSenha());
+
+        Cartao cartaoCriado;
 
         try {
-            cartao = cartoesRepositorie.save(cartao);
+            cartaoCriado = cartoesRepositorie.save(new Cartao(cartaoDTO.getNumeroCartao(), cartaoDTO.getSenha()));
         } catch (DataIntegrityViolationException ex) {
             throw new CartaoExistenteException(cartaoDTO);
         }
 
-        return mapper.map(cartao, CartaoDTO.class);
+        ModelMapper mapper = new ModelMapper();
+        return mapper.map(cartaoCriado, CartaoDTO.class);
+    }
+
+    public BigDecimal consultarSaldo(String numeroCartao) {
+
+        BigDecimal saldo;
+
+        try {
+            Cartao cartao = cartoesRepositorie.getCartaoByNumeroCartao(numeroCartao);
+            saldo = cartao.getSaldo();
+        } catch (NoSuchElementException | NullPointerException ex) {
+            throw new CartaoInexistenteException();
+        }
+
+        return saldo;
     }
 }

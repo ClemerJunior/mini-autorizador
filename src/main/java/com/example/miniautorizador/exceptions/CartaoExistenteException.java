@@ -8,11 +8,10 @@ import lombok.Getter;
 public class CartaoExistenteException extends RuntimeException{
 
     private final CartaoDTO cartao;
-    private final String message;
 
 
     public CartaoExistenteException(CartaoDTO cartao) {
+        super("O cartão já existe");
         this.cartao = cartao;
-        this.message = "O Cartão já existe";
     };
 }

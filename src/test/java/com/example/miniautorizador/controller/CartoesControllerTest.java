@@ -5,7 +5,6 @@ import com.example.miniautorizador.exceptions.CartaoExistenteException;
 import com.example.miniautorizador.service.CartoesService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.assertj.core.api.Assertions;
-import org.hamcrest.CoreMatchers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -40,7 +39,6 @@ public class CartoesControllerTest {
         CartaoDTO cartaoDTO = new CartaoDTO();
         cartaoDTO.setNumeroCartao("1234564789");
         cartaoDTO.setSenha("senha");
-        cartaoDTO.setSaldo(new BigDecimal("-1"));
 
         mockMvc.perform(MockMvcRequestBuilders.post("/cartoes")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -143,7 +141,6 @@ public class CartoesControllerTest {
 
         String responseBody = mvcResult.getResponse().getContentAsString();
         Assertions.assertThat(responseBody).isEqualToIgnoringWhitespace(objectMapper.writeValueAsString(cartaoDTO));
-
     }
 
     @Test
@@ -159,5 +156,26 @@ public class CartoesControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(cartaoDTO)))
                 .andExpect(MockMvcResultMatchers.status().isUnprocessableEntity());
+    }
+
+    @Test
+    @DisplayName("Deve retornar o saldo do cartao corretamente")
+    void shouldReturnSaldo() throws Exception{
+        Mockito.when(cartoesService.consultarSaldo(any())).thenReturn(new BigDecimal(500));
+
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/cartoes/1231456789")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andReturn();
+        String responseBody = mvcResult.getResponse().getContentAsString();
+
+        Assertions.assertThat(new BigDecimal(500)).isEqualTo(new BigDecimal(responseBody));
+    }
+
+    @Test
+    @DisplayName("Deve retornar 400 quando o numero do cartao for invalido")
+    void whenNumeroCartaoInvalid() throws Exception{
+        mockMvc.perform(MockMvcRequestBuilders.get("/cartoes/asdf121313")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 }

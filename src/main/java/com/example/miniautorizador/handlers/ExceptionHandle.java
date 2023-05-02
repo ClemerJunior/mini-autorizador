@@ -1,6 +1,8 @@
 package com.example.miniautorizador.handlers;
 
 import com.example.miniautorizador.exceptions.CartaoExistenteException;
+import com.example.miniautorizador.exceptions.CartaoInexistenteException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -17,6 +19,28 @@ public class ExceptionHandle {
         responseErro.setCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
         responseErro.setMessage(ex.getMessage());
         responseErro.setCorpo(ex.getCartao());
+
+        return responseErro;
+    }
+
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(CartaoInexistenteException.class)
+    public ResponseErro handleCartaoInexistenteException(CartaoInexistenteException ex) {
+
+        ResponseErro responseErro = new ResponseErro();
+        responseErro.setCode(HttpStatus.NOT_FOUND.value());
+        responseErro.setMessage(ex.getMessage());
+
+        return responseErro;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseErro handleConstraintViolationException(ConstraintViolationException ex) {
+
+        ResponseErro responseErro = new ResponseErro();
+        responseErro.setCode(HttpStatus.BAD_REQUEST.value());
+        responseErro.setMessage(ex.getMessage());
 
         return responseErro;
     }
