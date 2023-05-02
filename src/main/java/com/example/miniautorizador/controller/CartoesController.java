@@ -4,6 +4,8 @@ import com.example.miniautorizador.domain.dtos.CartaoDTO;
 import com.example.miniautorizador.service.CartoesService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,6 +21,6 @@ public class CartoesController {
 
     @PostMapping
     public ResponseEntity<CartaoDTO> criarCartao(@Valid @RequestBody CartaoDTO cartaoDTO) {
-        return ResponseEntity.ok(cartoesService.criarCartao(cartaoDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(cartoesService.criarCartao(cartaoDTO));
     }
 }

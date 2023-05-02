@@ -47,4 +47,22 @@ public class CartoesServiceTest {
         Assertions.assertThat(cartaoCriado.getSenha()).isEqualTo(cartao.getSenha());
         Assertions.assertThat(cartaoCriado.getSaldo()).isEqualTo(new BigDecimal("500"));
     }
+
+    @Test
+    @DisplayName("Deve criar um cartão novo sem erros")
+    void shoudCreateNewCardf() {
+        CartaoDTO cartaoDTO = new CartaoDTO();
+        cartaoDTO.setNumeroCartao("123456313");
+        cartaoDTO.setSenha("senha");
+
+        Cartao cartao = new Cartao(cartaoDTO.getNumeroCartao(), cartaoDTO.getSenha());
+        cartao.setSaldo(new BigDecimal("-1"));
+
+        Mockito.when(cartoesRepositorie.save(any())).thenReturn(cartao);
+        CartaoDTO cartaoCriado = cartoesService.criarCartao(cartaoDTO);
+
+        Assertions.assertThat(cartaoCriado.getNumeroCartao()).isEqualTo(cartao.getNumeroCartao());
+        Assertions.assertThat(cartaoCriado.getSenha()).isEqualTo(cartao.getSenha());
+        Assertions.assertThat(cartaoCriado.getSaldo()).isEqualTo(new BigDecimal("500"));
+    }
 }

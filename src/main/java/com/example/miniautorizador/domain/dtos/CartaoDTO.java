@@ -1,5 +1,6 @@
 package com.example.miniautorizador.domain.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
@@ -14,6 +15,7 @@ public class CartaoDTO {
     @Pattern(regexp = "^[0-9]+$")
     private String numeroCartao;
 
+    @JsonIgnore
     private BigDecimal saldo;
 
     @NotBlank

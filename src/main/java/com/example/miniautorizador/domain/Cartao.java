@@ -1,9 +1,13 @@
 package com.example.miniautorizador.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.validator.constraints.Range;
 
 import java.math.BigDecimal;
 
@@ -20,6 +24,7 @@ public class Cartao {
     @Column(unique = true, updatable = false)
     private String numeroCartao;
 
+    @PositiveOrZero
     private BigDecimal saldo;
 
     private String senha;
