@@ -36,16 +36,7 @@ public class CartoesService {
     }
 
     public BigDecimal consultarSaldo(String numeroCartao) {
-
-        BigDecimal saldo;
-
-        try {
-            Cartao cartao = cartoesRepositorie.getCartaoByNumeroCartao(numeroCartao);
-            saldo = cartao.getSaldo();
-        } catch (NoSuchElementException | NullPointerException ex) {
-            throw new CartaoInexistenteException();
-        }
-
-        return saldo;
+        return cartoesRepositorie.getCartaoByNumeroCartao(numeroCartao)
+                .orElseThrow(CartaoInexistenteException::new).getSaldo();
     }
 }

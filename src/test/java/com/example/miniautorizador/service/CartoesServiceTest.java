@@ -18,6 +18,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 
 import java.math.BigDecimal;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 
@@ -67,7 +68,7 @@ public class CartoesServiceTest {
     @DisplayName("Deve retornar o saldo do cartao consultado pelo numero")
     void shouldReturnSaldo() {
         Mockito.when(cartoesRepositorie.getCartaoByNumeroCartao(any()))
-                .thenReturn(new Cartao(cartaoDTO.getNumeroCartao(), cartaoDTO.getSenha()));
+                .thenReturn(Optional.of(new Cartao(cartaoDTO.getNumeroCartao(), cartaoDTO.getSenha())));
 
         BigDecimal saldo = cartoesService.consultarSaldo("123456313");
 
@@ -75,19 +76,9 @@ public class CartoesServiceTest {
     }
 
     @Test
-    @DisplayName("Deve retornar 404 cartão null")
-    void shouldReturnNotFoundCartaoNull() {
-        Mockito.when(cartoesRepositorie.getCartaoByNumeroCartao(any())).thenReturn(null);
-
-        Assertions.assertThatThrownBy(() -> cartoesService.consultarSaldo("123456313"))
-                .isInstanceOf(CartaoInexistenteException.class)
-                .hasMessage("cartão não encontrado");
-    }
-
-    @Test
     @DisplayName("Deve retornar 404 cartão não encontrado")
-    void shouldReturnNotFoundNoSuchElement() {
-        Mockito.when(cartoesRepositorie.getCartaoByNumeroCartao(any())).thenThrow(new NoSuchElementException());
+    void shouldReturnNotFound() {
+        Mockito.when(cartoesRepositorie.getCartaoByNumeroCartao(any())).thenReturn(Optional.empty());
 
         Assertions.assertThatThrownBy(() -> cartoesService.consultarSaldo("123456313"))
                 .isInstanceOf(CartaoInexistenteException.class)
