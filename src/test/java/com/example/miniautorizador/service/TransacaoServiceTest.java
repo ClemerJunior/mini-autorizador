@@ -3,9 +3,8 @@ package com.example.miniautorizador.service;
 import com.example.miniautorizador.domain.Cartao;
 import com.example.miniautorizador.domain.dtos.TransacaoDTO;
 import com.example.miniautorizador.domain.enumerations.TransacaoStatusEnum;
+import com.example.miniautorizador.exceptions.AutorizacaoException;
 import com.example.miniautorizador.exceptions.CartaoInexistenteException;
-import com.example.miniautorizador.exceptions.SaldoInsuficienteException;
-import com.example.miniautorizador.exceptions.SenhaInvalidaException;
 import com.example.miniautorizador.repositories.CartoesRepositorie;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -83,7 +82,7 @@ public class TransacaoServiceTest {
         transacao.setSenhaCartao("1321564");
 
         Assertions.assertThatThrownBy(() -> transacaoService.realizarTransacao(transacao))
-                .isInstanceOf(SenhaInvalidaException.class)
+                .isInstanceOf(AutorizacaoException.class)
                 .hasMessage(TransacaoStatusEnum.SENHA_INVALIDA.name());
         Assertions.assertThat(cartao.getSaldo()).isEqualByComparingTo("500");
         Mockito.verify(cartoesRepositorie, VerificationModeFactory.times(1))
@@ -99,7 +98,7 @@ public class TransacaoServiceTest {
         transacao.setValor(new BigDecimal("550"));
 
         Assertions.assertThatThrownBy(() -> transacaoService.realizarTransacao(transacao))
-                .isInstanceOf(SaldoInsuficienteException.class)
+                .isInstanceOf(AutorizacaoException.class)
                 .hasMessage(TransacaoStatusEnum.SALDO_INSUFICIENTE.name());
         Assertions.assertThat(cartao.getSaldo()).isEqualByComparingTo("500");
         Mockito.verify(cartoesRepositorie, VerificationModeFactory.times(1))

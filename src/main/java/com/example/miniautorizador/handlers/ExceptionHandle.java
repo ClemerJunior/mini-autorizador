@@ -1,10 +1,7 @@
 package com.example.miniautorizador.handlers;
 
 import com.example.miniautorizador.domain.enumerations.TransacaoStatusEnum;
-import com.example.miniautorizador.exceptions.CartaoExistenteException;
-import com.example.miniautorizador.exceptions.CartaoInexistenteException;
-import com.example.miniautorizador.exceptions.SaldoInsuficienteException;
-import com.example.miniautorizador.exceptions.SenhaInvalidaException;
+import com.example.miniautorizador.exceptions.*;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -49,23 +46,12 @@ public class ExceptionHandle {
     }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    @ExceptionHandler(SenhaInvalidaException.class)
-    public ResponseErro handleSenhaInvalidaException(SenhaInvalidaException ex) {
+    @ExceptionHandler(AutorizacaoException.class)
+    public ResponseErro handleAutorizacaoException(AutorizacaoException ex) {
 
         ResponseErro responseErro = new ResponseErro();
         responseErro.setCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
-        responseErro.setMessage(TransacaoStatusEnum.SENHA_INVALIDA.name());
-
-        return responseErro;
-    }
-
-    @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
-    @ExceptionHandler(SaldoInsuficienteException.class)
-    public ResponseErro handleSaldoInsuficienteException(SaldoInsuficienteException ex) {
-
-        ResponseErro responseErro = new ResponseErro();
-        responseErro.setCode(HttpStatus.UNPROCESSABLE_ENTITY.value());
-        responseErro.setMessage(TransacaoStatusEnum.SALDO_INSUFICIENTE.name());
+        responseErro.setMessage(ex.getMessage());
 
         return responseErro;
     }
