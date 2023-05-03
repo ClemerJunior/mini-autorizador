@@ -4,7 +4,6 @@ import com.example.miniautorizador.domain.dtos.CartaoDTO;
 import com.example.miniautorizador.exceptions.CartaoExistenteException;
 import com.example.miniautorizador.service.CartoesService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +15,7 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import java.math.BigDecimal;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -126,7 +126,7 @@ public class CartoesControllerTest {
                 .andReturn();
 
         String responseBody = mvcResult.getResponse().getContentAsString();
-        Assertions.assertThat(responseBody).isEqualToIgnoringWhitespace(objectMapper.writeValueAsString(cartaoDTO));
+        assertThat(responseBody).isEqualToIgnoringWhitespace(objectMapper.writeValueAsString(cartaoDTO));
 
         verify(cartoesService, times(1)).criarCartao(any());
     }
@@ -159,7 +159,7 @@ public class CartoesControllerTest {
 
         String responseBody = mvcResult.getResponse().getContentAsString();
 
-        Assertions.assertThat(new BigDecimal("500")).isEqualTo(new BigDecimal(responseBody));
+        assertThat(new BigDecimal("500")).isEqualTo(new BigDecimal(responseBody));
 
         verify(cartoesService, times(1)).consultarSaldo(any());
     }
