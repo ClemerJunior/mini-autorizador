@@ -3,6 +3,7 @@ package com.example.miniautorizador.service;
 
 import com.example.miniautorizador.domain.Cartao;
 import com.example.miniautorizador.domain.dtos.CartaoDTO;
+import com.example.miniautorizador.domain.enumerations.TransacaoStatusEnum;
 import com.example.miniautorizador.exceptions.CartaoExistenteException;
 import com.example.miniautorizador.exceptions.CartaoInexistenteException;
 import com.example.miniautorizador.repositories.CartoesRepositorie;
@@ -87,8 +88,8 @@ public class CartoesServiceTest {
 
         assertThatThrownBy(() -> cartoesService.consultarSaldo("123456313"))
                 .isInstanceOf(CartaoInexistenteException.class)
-                .hasMessage("cartão não encontrado");
+                .hasMessage(TransacaoStatusEnum.CARTAO_INEXISTENTE.name());
 
-        verify(cartoesRepositorie, times(1)).save(any());
+        verify(cartoesRepositorie, times(0)).save(any());
     }
 }
