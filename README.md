@@ -35,7 +35,7 @@ A resposta da requisição será um payload JSON contendo o número do cartão e
 Para autorizar uma transação, envie uma requisição POST para o endpoint `/transacoes` com um payload JSON contendo o número do cartão, o valor da transação e a descrição:
 
 ```JSON
-POST /cartoes
+POST /transacoes
   {
     "numeroCartao":"132456789",
     "senhaCartao":"senha",
