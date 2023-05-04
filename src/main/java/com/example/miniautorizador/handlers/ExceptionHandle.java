@@ -1,7 +1,8 @@
 package com.example.miniautorizador.handlers;
 
-import com.example.miniautorizador.domain.enumerations.TransacaoStatusEnum;
-import com.example.miniautorizador.exceptions.*;
+import com.example.miniautorizador.exceptions.AutorizacaoException;
+import com.example.miniautorizador.exceptions.CartaoExistenteException;
+import com.example.miniautorizador.exceptions.CartaoInexistenteException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
